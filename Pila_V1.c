@@ -26,10 +26,9 @@ int prec(char operador1, char operador2)
 
 void postfijo(char expresion[])
 {
-	char symb,topsymb,aux = 0;
+	char symb,topsymb;
 	int i=0,j=0;
 	nodo *pila = NULL;
-	//nodo *stack = NULL;
 	char postfijo[50];
 	while(expresion[i] != '\0')
 	{
@@ -37,17 +36,17 @@ void postfijo(char expresion[])
 		if(symb != '^' && symb != '*' && symb != '/' && symb != '+' && symb != '-' )
 		{
 			postfijo[j] = symb;
-			j++;
+		j++;
 		}
 		else
 		{
-			pila = stackTop(pila,&aux);
-			while(!isEmpty(pila) == 1 && prec(aux,symb) == 1)
+			stackTop(pila,&topsymb);
+			while(!isEmpty(pila) == 1 && prec(topsymb,symb) == 1)
 			{
-				pila = pop(pila,&aux);
-				topsymb = aux;
+				pila = pop(pila,&topsymb);
 				postfijo[j] = topsymb;
 				j++;
+				stackTop(pila,&topsymb);
 			}
 			pila = push(pila,symb);
 		}
@@ -55,8 +54,7 @@ void postfijo(char expresion[])
 	}
 	while(isEmpty(pila) != 1)
 	{
-		pila = pop(pila,&aux);
-		topsymb = aux;
+		pila = pop(pila,&topsymb);
 		postfijo[j] = topsymb;
 		j++;
 	}
@@ -72,9 +70,8 @@ void postfijo(char expresion[])
 int main()
 {
 	char cadena[50] = "7+2*5-3";// 725*+3-
-	/*printf("Dame una expresion aritmetica: ");
-	gets(cadena);*/
 	postfijo(cadena);
 	pausa;
 	return 0;	
 }
+

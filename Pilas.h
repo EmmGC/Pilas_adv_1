@@ -64,17 +64,30 @@ int isEmpty(nodo *raiz)
 		return 0;
 }
 
-nodo *stackTop(nodo *raiz,char *dato)
+/*char stackTop(nodo *raiz,char dato)
 {
 
 	if(raiz == NULL)
 	{
-		//printf("Lista vacia\n");
 		return ('\0');
 	}
-	*dato = raiz -> info; 
+	dato = raiz -> info; 
+	return dato;
+	
+}*/
+
+nodo *stackTop(nodo *raiz, char *dato)
+{
+	if(raiz == NULL)
+	{
+		//printf("Lista vacía, no ha nada que eliminar.\n");
+		//pausa;
+		return 0;
+	}
+	*dato = raiz ->info;
 	return raiz;
 }
+
  void imprimir(nodo *raiz)
  {	
  	nodo *recorre=raiz;
