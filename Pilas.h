@@ -8,6 +8,7 @@
  
  struct Nodo{
  	char info;
+ 	float in;
 	 struct Nodo *sig;	
  };
  
@@ -39,6 +40,38 @@ nodo *push(nodo *raiz, char dato)
 	raiz = nuevo;
 	return raiz;
 }
+nodo *fpush(nodo *raiz, float dato)
+{
+	nodo *nuevo = NULL;
+	nuevo = (nodo *) malloc(sizeof(nodo));
+	if (nuevo == NULL)
+	{
+		printf("No hay sistema.(NULL)\n");
+		exit(1);
+	}
+	nuevo -> in= dato;
+	nuevo -> sig = NULL;
+	
+	nuevo -> sig = raiz;
+	raiz = nuevo;
+	return raiz;
+}
+
+nodo *fpop(nodo *raiz, float *dato)
+{
+	nodo *siguiente = NULL;
+	if(raiz == NULL)
+	{
+		//printf("Lista vacia\n");
+		return ('\0');
+	}
+	siguiente = raiz;
+	raiz = raiz -> sig; 
+	*dato = siguiente -> in;
+	free(siguiente);
+	return raiz;
+}
+
 
 nodo *pop(nodo *raiz, char *dato)
 {
