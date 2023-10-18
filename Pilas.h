@@ -17,7 +17,9 @@ nodo *raiz=NULL;
 
 //Prototipos
 nodo *push(nodo *raiz,char dato);
+nodo *fpush(nodo *raiz, float dato);
 nodo *pop(nodo *raiz, char *dato);
+nodo *fpop(nodo *raiz, float *dato);
 int isEmpty(nodo *raiz);
 nodo *stackTop(nodo *raiz, char *dato);
 void imprimir(nodo *raiz);
