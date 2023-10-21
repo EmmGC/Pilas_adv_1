@@ -6,27 +6,31 @@
 #define cls system("cls")
 #define NL putchar("\n")
  
+ 
+ union datos
+ {
+ 	char cha;
+ 	float flo;
+ };
+ 
  struct Nodo{
- 	char info;
- 	float in;
-	 struct Nodo *sig;	
+ 	union datos info;
+	struct Nodo *sig;	
  };
  
 typedef struct Nodo nodo;
 nodo *raiz=NULL;
 
 //Prototipos
-nodo *push(nodo *raiz,char dato);
-nodo *fpush(nodo *raiz, float dato);
-nodo *pop(nodo *raiz, char *dato);
-nodo *fpop(nodo *raiz, float *dato);
+nodo *push(nodo *raiz,union datos dato);
+nodo *pop(nodo *raiz,union datos *dato);
 int isEmpty(nodo *raiz);
-nodo *stackTop(nodo *raiz, char *dato);
+nodo *stackTop(nodo *raiz,union datos *dato);
 void imprimir(nodo *raiz);
 //primitivas
 
 
-nodo *push(nodo *raiz, char dato)
+nodo *push(nodo *raiz,union datos dato)
 {
 	nodo *nuevo = NULL;
 	nuevo = (nodo *) malloc(sizeof(nodo));
@@ -42,40 +46,7 @@ nodo *push(nodo *raiz, char dato)
 	raiz = nuevo;
 	return raiz;
 }
-nodo *fpush(nodo *raiz, float dato)
-{
-	nodo *nuevo = NULL;
-	nuevo = (nodo *) malloc(sizeof(nodo));
-	if (nuevo == NULL)
-	{
-		printf("No hay sistema.(NULL)\n");
-		exit(1);
-	}
-	nuevo -> in= dato;
-	nuevo -> sig = NULL;
-	
-	nuevo -> sig = raiz;
-	raiz = nuevo;
-	return raiz;
-}
-
-nodo *fpop(nodo *raiz, float *dato)
-{
-	nodo *siguiente = NULL;
-	if(raiz == NULL)
-	{
-		//printf("Lista vacia\n");
-		return ('\0');
-	}
-	siguiente = raiz;
-	raiz = raiz -> sig; 
-	*dato = siguiente -> in;
-	free(siguiente);
-	return raiz;
-}
-
-
-nodo *pop(nodo *raiz, char *dato)
+nodo *pop(nodo *raiz,union datos *dato)
 {
 	nodo *siguiente = NULL;
 	if(raiz == NULL)
@@ -99,19 +70,7 @@ int isEmpty(nodo *raiz)
 		return 0;
 }
 
-/*char stackTop(nodo *raiz,char dato)
-{
-
-	if(raiz == NULL)
-	{
-		return ('\0');
-	}
-	dato = raiz -> info; 
-	return dato;
-	
-}*/
-
-nodo *stackTop(nodo *raiz, char *dato)
+nodo *stackTop(nodo *raiz,union datos *dato)
 {
 	if(raiz == NULL)
 	{

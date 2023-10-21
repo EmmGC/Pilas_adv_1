@@ -36,6 +36,7 @@ int prec(char operador1, char operador2)
 }
 float evaluar(char expresion[])
  {
+ 	union datos cubeta;
  	char symb,aux[1];
  	int i = 0;
  	float opnd1,opnd2,value;
@@ -45,12 +46,16 @@ float evaluar(char expresion[])
  		symb = expresion[i];
 		if(symb != '^' && symb != '*' && symb != '/' && symb != '+' && symb != '-' )
 		{
-			p = fpush(p,symb - 48); // symb es el nuemero, pero al convertirlo a float se le suma a ese numero 48 es por eso que se le resta
+			cubeta.flo = symb;
+			cubeta.flo = cubeta.flo - 48;
+			p = push(p,cubeta); // symb es el nuemero, pero al convertirlo a float se le suma a ese numero 48 es por eso que se le resta
 		}
 		else
 		{
-			p = fpop(p,&opnd1);
-			p = fpop(p,&opnd2);
+			p = pop(p,&cubeta);
+			opnd1 = cubeta.flo;
+			p = pop(p,&cubeta);
+			opnd2 = cubeta.flo;
 			if(symb == '^')					// se analiza el orden de la operacion
 				value = (pow(opnd2,opnd1));
 			if(symb == '+')
@@ -61,16 +66,19 @@ float evaluar(char expresion[])
 				value = (opnd1*opnd2);
 			if(symb == '/')
 				value = (opnd2/opnd1);
-			p = fpush(p,value);				// entra el resultado de dicha operacion
+			cubeta.flo = value;
+			p = push(p,cubeta);				// entra el resultado de dicha operacion
 		}
 		i++;
 	}
-	p = fpop(p,&value);
+	p = pop(p,&cubeta);
+	value = cubeta.flo;
 	return value;
  }
 
 void postfijo(char expresion[])
 {
+	union datos cubeta;
 	char symb,topsymb;
 	int i=0,j=0;
 	nodo *pila = NULL;
@@ -85,19 +93,26 @@ void postfijo(char expresion[])
 		}
 		else
 		{
-			stackTop(pila,&topsymb);// 									Analiza y regresa el dato donde esta apuntado y se lo da topsymb
+			stackTop(pila,&cubeta);// 									Analiza y regresa el dato donde esta apuntado y se lo da topsymb
+			topsymb = cubeta.cha;
 			while(!isEmpty(pila) == 1 && prec(topsymb,symb) == 1)
 			{
-				pila = pop(pila,&topsymb); // 							Saca el dato de la pila
+				pila = pop(pila,&cubeta); // 							Saca el dato de la pila
+				topsymb = cubeta.cha;
 				post[j] = topsymb;
 				j++;
-				stackTop(pila,&topsymb);// 								Actualiza el dato
+				stackTop(pila,&cubeta);// 								Actualiza el dato
+				topsymb = cubeta.cha;
 			}
 			if(isEmpty(pila) == 1 || symb != ')')
-				pila = push(pila,symb);
+			{
+				cubeta.cha = symb;
+				pila = push(pila,cubeta);
+			}
 			else
 			{
-				pila = pop(pila,&topsymb);
+				pila = pop(pila,&cubeta);
+				topsymb = cubeta.cha;
 			}
 				
 		}
@@ -105,7 +120,8 @@ void postfijo(char expresion[])
 	}
 	while(!isEmpty(pila) == 1)
 	{
-		pila = pop(pila,&topsymb);
+		pila = pop(pila,&cubeta);
+		topsymb = cubeta.cha;
 		post[j] = topsymb;
 		j++;
 	}
